@@ -1,24 +1,21 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
-#include "BobusCharacter.generated.h"
+#include "BobusCharacterBase.h"
+#include "BobusCharacterPlayer.generated.h"
 
-class UInputComponent;
-class USkeletalMeshComponent;
-class USceneComponent;
-class UCameraComponent;
-class UMotionControllerComponent;
-class UAnimMontage;
-class USoundBase;
-
-UCLASS(config=Game)
-class ABobusCharacter : public ACharacter
+/**
+ * 
+ */
+UCLASS()
+class BOBUS_API ABobusCharacterPlayer : public ABobusCharacterBase
 {
 	GENERATED_BODY()
 
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
-	UPROPERTY(VisibleDefaultsOnly, Category=Mesh)
+	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 	USkeletalMeshComponent* Mesh1P;
 
 	/** Gun mesh: 1st person view (seen only by self) */
@@ -34,33 +31,10 @@ class ABobusCharacter : public ACharacter
 	UCameraComponent* FirstPersonCameraComponent;
 
 public:
-	ABobusCharacter();
+	ABobusCharacterPlayer();
 
 protected:
-	virtual void BeginPlay();
-
-public:
-
-	/** Gun muzzle's offset from the characters location */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
-	FVector GunOffset;
-
-	/** Projectile class to spawn */
-	UPROPERTY(EditDefaultsOnly, Category=Projectile)
-	TSubclassOf<class ABobusProjectile> ProjectileClass;
-
-	/** Sound to play each time we fire */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
-	USoundBase* FireSound;
-
-	/** AnimMontage to play each time we fire */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	UAnimMontage* FireAnimation;
-
-protected:
-	
-	/** Fires a projectile. */
-	void OnFire();
+	virtual void BeginPlay() override;
 
 	/** Handles moving forward/backward */
 	void MoveForward(float Val);
@@ -68,17 +42,24 @@ protected:
 	/** Handles stafing movement, left and right */
 	void MoveRight(float Val);
 
+public:
+	
+	/** Gun muzzle's offset from the characters location */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	FVector GunOffset;
+
 protected:
 	// APawn interface
 
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 
 	// End of APawn interface
-
 public:
+
 	/** Returns Mesh1P subobject **/
 	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
-};
 
+	
+};
